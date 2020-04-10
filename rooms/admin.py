@@ -25,7 +25,9 @@ class RoomAdmin(admin.ModelAdmin):
         'check_in',
         'check_out',
         'instant_book',
-        'count_amenities'
+        'count_amenities',
+        'count_photos',
+        'total_rating'
     ]
 
     list_filter = ['city', 'instant_book', 'country', ]
@@ -34,10 +36,13 @@ class RoomAdmin(admin.ModelAdmin):
 
     filter_horizontal = ['amenity',
                          'facility',
-                         'house_rules',]
+                         'house_rules', ]
 
     def count_amenities(self, obj):
         return obj.amenity.count()
+
+    def count_photos(self, obj):
+        return obj.photos.count()
 
     count_amenities.short_description = 'Говеха'
 

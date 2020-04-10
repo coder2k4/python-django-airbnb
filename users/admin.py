@@ -10,19 +10,19 @@ class AuthorAdmin(UserAdmin):
     """ Custom user admin """
     fieldsets = UserAdmin.fieldsets + (
         ("Custom Profile", {
-             "fields": ("avatar",
-                        "gender",
-                        "bio",
-                        "birthday",
-                        "language",
-                        "currency",
-                        "superhost",
-                        )
+            "fields": ("avatar",
+                       "gender",
+                       "bio",
+                       "birthday",
+                       "language",
+                       "currency",
+                       "superhost",
+                       )
         }),
     )
 
-    # list_display = ('username', 'gender', 'language', 'currency', 'superhost')
-    # list_filter = ('gender',)
+    list_display = UserAdmin.list_display + ('gender', 'language', 'currency', 'superhost')
+    list_filter = UserAdmin.list_filter + ('gender', 'superhost', 'language')
 
 
 admin.site.register(User, AuthorAdmin)
