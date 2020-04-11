@@ -11,6 +11,7 @@ class Command(BaseCommand):
         parser.add_argument(
             '--number',
             default=1,
+            type=int,
             help=(
                 'This command create NUMBER users'
             ),
@@ -18,8 +19,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # получаем из командной строки количество пользователей, по дефолту 1
-        numberToCreate = int(options.get('number'))
+        numberToCreate = options.get('number')
         seeder = Seed.seeder()
+        hosts = User.objects.all()
         seeder.add_entity(User, numberToCreate, {
             'is_staff': False,
             'is_superuser': False,
