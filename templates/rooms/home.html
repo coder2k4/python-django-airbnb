@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% for room in rooms %}
+
+        <p>{{ room.name }}</p>
+
+    {% endfor %}
+
+    <ul>
+        <li>page = {{ current_page }}</li>
+        <li>number_of_page = {{ size }}</li>
+        <li>offset = {{ offset }}</li>
+    </ul>
+
+    {% for p in range %}
+        <a href="?page={{ p }}">{{ p }}</a>
+    {% endfor %}
+
+{% endblock %}

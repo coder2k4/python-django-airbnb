@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django_countries.fields import CountryField
 from users.models import User
 from core import models as core_models
@@ -88,3 +89,6 @@ class Room(core_models.TimeStampedModel):
         for review in all_reviews:
             all_ratings += review.rating_average()
         return all_ratings / len(all_reviews)
+
+    def get_absolute_url(self):
+        return reverse('rooms:room_detail', kwargs={'pk': self.pk})
