@@ -4,25 +4,17 @@ from . import models
 
 
 class LoginForm(forms.Form):
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    username = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "username"}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Password"}))
 
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        try:
-            models.User.objects.get(username=email)
-            return email
-        except:
-            raise forms.ValidationError("User don't exist")
-
-    def clean_password(self):
-        email = self.cleaned_data.get('email')
+    def clean(self):
+        username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
         try:
-            user = models.User.objects.get(username=email)
+            user = models.User.objects.get(username=username)
             if user.check_password(password):
                 return password
             else:
-                raise forms.ValidationError("User don't exist")
+                self.add_error("password", forms.ValidationError("Password does't match"))
         except models.User.DoesNotExist:
-            pass
+            raise forms.ValidationError("User does't exist")
