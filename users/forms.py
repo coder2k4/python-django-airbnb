@@ -13,7 +13,7 @@ class LoginForm(forms.Form):
         try:
             user = models.User.objects.get(username=username)
             if user.check_password(password):
-                return password
+                return self.cleaned_data
             else:
                 self.add_error("password", forms.ValidationError("Password does't match"))
         except models.User.DoesNotExist:

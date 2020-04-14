@@ -1,39 +1,34 @@
-from django.contrib.auth import authenticate, logout, login
-from django.shortcuts import render, redirect
+from pprint import pprint
+
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.views import LogoutView
+from django.http import request
+from django.shortcuts import redirect
 
 # Create your views here.
-from django.urls import reverse
-from django.views import View
+from django.urls import reverse_lazy
+from django.views.generic import FormView
+
 from users import forms
 
 
-class LoginView(View):
+class Login(FormView):
     """
-        Вьюшка для отображения формы LOGIN.
-        Работаем с формой LoginForm, логиним пользователя  м
-        в случае успешной проверки пользователя и пароля
+        Login(FormView)
+        Работаем с формой LoginForm, логиним пользователя
     """
+    template_name = "users/login.html"
+    form_class = forms.LoginForm
+    success_url = reverse_lazy("core:home")
 
-    def get(self, request):
-        form = forms.LoginForm(request.GET)
-        if form.is_valid():
-            print(form.cleaned_data)
-        return render(request, 'users/login.html', {"form": form})
-
-    def post(self, request):
-        form = forms.LoginForm(request.POST)
-        if form.is_valid():
-            #username = form.cleaned_data.get('username')
-            #password = form.cleaned_data.get("password")
-            username = request.POST['username']
-            password = request.POST['password']
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                redirect(reverse('core:home'))
-        return render(request, 'users/login.html', {"form": form})
+    def form_valid(self, form):
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
+        user = authenticate(self.request, username=username, password=password)
+        if user is not None:
+            login(self.request, user)
+        return super().form_valid(form)
 
 
-def log_out(request):
-    logout(request)
-    return redirect(reverse('core:home'))
+class Logout(LogoutView):
+    next_page = reverse_lazy("core:home")
