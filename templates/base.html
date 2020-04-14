@@ -8,6 +8,13 @@
     <title>{% block page_title %}Apartment controller {% endblock %}</title>
 </head>
 {% include 'partials/header.html' %}
+{% block header %}
+    <form method="GET" action="{% url 'rooms:room_search' %}">
+        <input type="text" name="city" placeholder="Поиск по городу">
+    </form>
+{% endblock %}
+
+
 <body>
 {% block page_content %}
     <h1>CORE BASE HTML</h1>

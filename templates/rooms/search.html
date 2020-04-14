@@ -4,6 +4,17 @@
     Search page
 {% endblock %}
 
+{% block header %}
+    <form method="GET" action="{% url 'rooms:room_search' %}">
+        {{ form.as_p }}
+        <button>Осуществить поиск!</button>
+    </form>
+    <div>
+        {{ rooms }}
+    </div>
+{% endblock %}
+
+
 {% block page_content %}
-    <h2>Search page</h2>
+
 {% endblock %}

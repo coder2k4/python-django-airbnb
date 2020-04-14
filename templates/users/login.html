@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    Login page
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+
+{% block page_content %}
+    <form method="GET" action="{% url 'rooms:room_search' %}">
+        {{ form.as_p }}
+        <button>Войти!</button>
+    </form>
+{% endblock %}
