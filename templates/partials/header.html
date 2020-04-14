@@ -3,6 +3,7 @@
     {% if user.is_authenticated %}
         <li><a href="{% url 'users:logout' %}">Hello, {{ user.username }}</a></li>
     {% else %}
+        <li><a href="{% url 'users:sighup' %}">Sighup</a></li>
         <li><a href="{% url 'users:login' %}">Login</a></li>
     {% endif %}
 </ul>

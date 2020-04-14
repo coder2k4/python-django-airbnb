@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    Login page
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+
+{% block page_content %}
+    <form method="POST" action="{% url 'users:sighup' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Зарегестрироваться!</button>
+    </form>
+{% endblock %}

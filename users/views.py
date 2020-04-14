@@ -1,11 +1,6 @@
-from pprint import pprint
-
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LogoutView
-from django.http import request
-from django.shortcuts import redirect
 
-# Create your views here.
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 
@@ -31,4 +26,18 @@ class Login(FormView):
 
 
 class Logout(LogoutView):
+    """
+    Logout(LogoutView)
+    Выкидываем пользователя из авторизации
+    """
     next_page = reverse_lazy("core:home")
+
+
+class Sighup(FormView):
+    """
+        Sighup(FormView)
+        Вьюшка регистрации пользователя
+    """
+    template_name = "users/sighup.html"
+    form_class = forms.SignUpForm
+    success_url = reverse_lazy("core:home")
