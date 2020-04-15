@@ -20,30 +20,13 @@ class LoginForm(forms.Form):
             raise forms.ValidationError("User does't exist")
 
 
-class SignUpForm(forms.Form):
-    first_name = forms.CharField(max_length=80, required=False)
-    last_name = forms.CharField(max_length=80, required=False)
-    username = forms.CharField(max_length=80)
-    email = forms.EmailField()
+class SignUpForm(forms.ModelForm):
+    class Meta:
+        model = models.User
+        fields = ("first_name", "last_name", 'email', 'username')
+
     password = forms.CharField(widget=forms.PasswordInput)
     password_ver = forms.CharField(widget=forms.PasswordInput, label='confirm password')
-
-    def clean_username(self):
-        username = self.cleaned_data.get('username')
-        try:
-            user = models.User.objects.get(username=username)
-            if user is not None:
-                raise forms.ValidationError('User already exists!')
-        except models.User.DoesNotExist:
-            return username
-
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        try:
-            models.User.objects.get(email=email)
-            raise forms.ValidationError('User with this password already exists')
-        except models.User.DoesNotExist:
-            return email
 
     def clean_password_ver(self):
         # поля обрабатываются по порядку, мы не может из
@@ -55,14 +38,10 @@ class SignUpForm(forms.Form):
         else:
             return password
 
-    def save(self):
-        first_name = self.cleaned_data.get('first_name')
-        last_name = self.cleaned_data.get('last_name')
-        username = self.cleaned_data.get('username')
-        email = self.cleaned_data.get('email')
+    def save(self, *args, **kwargs):
         password = self.cleaned_data.get('password')
-
-        user = models.User.objects.create_user(username, email, password)
-        user.first_name = first_name
-        user.last_name = last_name
+        # Create, but don't save the new author instance.
+        user = super().save(commit=False)
+        user.set_password(password)
         user.save()
+
