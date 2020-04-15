@@ -1,8 +1,16 @@
+import uuid
+
+from django.core.mail import send_mail
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-
 # Create your models here.
+from django.urls import reverse
+from django.utils.html import strip_tags
+
+from config import settings
+
+
 class User(AbstractUser):
     """ Custom user model """
 
@@ -31,3 +39,18 @@ class User(AbstractUser):
     language = models.CharField(choices=LANGUAGE_CHOICES, max_length=10, blank=True, default='Ru')
     currency = models.CharField(choices=CURRENCY_CHOICES, max_length=10, blank=True, default='Rub')
     superhost = models.BooleanField(default=False)
+    email_confirmed = models.BooleanField(default=False)
+    email_secret = models.CharField(max_length=20, default="", blank=True)
+
+    def verify_email(self):
+        if self.email_confirmed is False:
+            secret = uuid.uuid4().hex[:20]
+            self.email_secret = secret
+            html_message = f"Verify account, click here:<a href={reverse('core:home') + secret}>HERE</a>"
+            send_mail("Verify YOUR Account"
+                      , strip_tags(html_message)
+                      , settings.EMAIL_FROM
+                      , [self.email]
+                      , fail_silently=True
+                      , html_message=html_message)
+
