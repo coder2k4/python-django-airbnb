@@ -1,7 +1,8 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LogoutView
+from django.shortcuts import redirect
 
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import FormView, CreateView
 
 from users import forms, models
@@ -52,3 +53,17 @@ class Sighup(FormView):
             login(self.request, user)
         user.verify_email()
         return super().form_valid(form)
+
+
+def complete_verification(self, key):
+    """ Верификация емейла по ключу """
+    try:
+        user = models.User.objects.get(email_secret=key)
+        user.email_confirmed = True
+        user.save()
+        # todo: success message
+    except models.User.DoesNotExist:
+        # todo: add error message
+        pass
+
+    return redirect(reverse('core:home'))

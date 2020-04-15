@@ -21,7 +21,13 @@ class AuthorAdmin(UserAdmin):
         }),
     )
 
-    list_display = UserAdmin.list_display + ('gender', 'language', 'currency', 'superhost')
+    list_display = UserAdmin.list_display + (
+        'gender',
+        'language',
+        'currency',
+        'superhost',
+        'email_confirmed',
+        'email_secret')
     list_filter = UserAdmin.list_filter + ('gender', 'superhost', 'language')
 
 
