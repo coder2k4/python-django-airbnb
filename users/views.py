@@ -1,13 +1,14 @@
 import os
 
 import requests
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LogoutView
 from django.core.files.base import ContentFile
 from django.shortcuts import redirect
 
 from django.urls import reverse_lazy, reverse
-from django.views.generic import FormView, CreateView
+from django.views.generic import FormView, DetailView, UpdateView
 
 from users import forms, models
 
@@ -38,7 +39,12 @@ class Logout(LogoutView):
     next_page = reverse_lazy("core:home")
 
 
-class Sighup(FormView):
+# def log_out(request):
+#     messages.info(request, f"See you later")
+#     logout(request)
+#     return redirect(reverse("core:home"))
+
+class Signup(FormView):
     """
         Sighup(FormView)
         Вьюшка регистрации пользователя
@@ -105,7 +111,7 @@ def github_callback(request):
             else:
                 access_token = token_json.get('access_token')
                 # При удачном получении токена, отправляем запрос на получение данных пользователя
-                profile_request = request.get(
+                profile_request = requests.get(
                     "https://api.github.com/user",
                     headers={
                         "Authorization": f"token {access_token}",
@@ -206,4 +212,19 @@ def kakao_callback(request):
         return redirect(reverse("core:home"))
 
     except KakaoException:
+        messages.error(request, KakaoException)
         return redirect(reverse('users:login'))
+
+
+class UserProfileView(DetailView):
+    model = models.User
+    context_object_name = "user_obj"
+
+
+class UpdateProfileView(UpdateView):
+    model = models.User
+    template_name = "users/update_profile.html"
+    field = ('username', 'password', 'email')
+
+    def get_object(self, queryset=None):
+        return self.request.user

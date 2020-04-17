@@ -43,7 +43,6 @@ class User(AbstractUser):
         (LOGING_KAKAO, "Kakao"),
     )
 
-
     avatar = models.ImageField(upload_to="avatars", blank=True)
     gender = models.CharField(choices=GENDER_CHOICES, default='Potato', max_length=10, blank=True)
     bio = models.TextField(default="", blank=True)
@@ -69,3 +68,6 @@ class User(AbstractUser):
                       , fail_silently=True
                       , html_message=html_message)
             self.save()
+
+    def get_absolute_url(self):
+        return reverse('users:profile', kwargs={"pk": self.pk})

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+    {{ user_obj.username }}
+{% endblock page_title %}
+
+{% block search-bar %}
+{% endblock search-bar %}
+
+{% block content %}
+
+    {% if user_obj.avatar %}
+        <img src="{{ user_obj.avatar.url }}" alt="{{ user_obj.username }}">
+    {% else %}
+        <div><span>{{ user_obj.username|first }}</span></div>
+    {% endif %}
+
+    {{ user_obj.first_name }}
+    {{ user_obj.last_name }}
+    {{ user_obj.bio }}
+    {{ user_obj.superhost }}
+    {% for room in user_obj.rooms.all %}
+        {% include 'mixins/room_card.html' with room=room %}
+    {% endfor %}
+    <a href="#">Edit Profile</a>
+
+{% endblock content %}

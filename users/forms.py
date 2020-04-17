@@ -4,7 +4,7 @@ from . import models
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "username"}))
+    username = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Username"}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Password"}))
 
     def clean(self):
@@ -24,9 +24,16 @@ class SignUpForm(forms.ModelForm):
     class Meta:
         model = models.User
         fields = ("first_name", "last_name", 'email', 'username')
+        widgets = {
+            "username": forms.TextInput(attrs={'placeholder': 'Username'}),
+            "email": forms.EmailInput(attrs={"placeholder": "Email Name"}),
+            "first_name": forms.TextInput(attrs={"placeholder": "First Name"}),
+            "last_name": forms.TextInput(attrs={"placeholder": "Last Name"}),
+        }
 
-    password = forms.CharField(widget=forms.PasswordInput)
-    password_ver = forms.CharField(widget=forms.PasswordInput, label='confirm password')
+    password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Password"}))
+    password_ver = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Password verification"}),
+                                   label='Password verification')
 
     def clean_password_ver(self):
         # поля обрабатываются по порядку, мы не может из
@@ -44,4 +51,3 @@ class SignUpForm(forms.ModelForm):
         user = super().save(commit=False)
         user.set_password(password)
         user.save()
-

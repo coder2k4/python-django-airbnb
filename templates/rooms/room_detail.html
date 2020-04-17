@@ -1,41 +1,10 @@
-{% extends 'base.html' %}
-
+{% extends "base.html" %}
+{#{% load is_booked on_favs i18n %}#}
 
 {% block page_title %}
+    {{room.name}}
+{% endblock page_title %}
 
-{% endblock %}
-
-{% block page_content %}
-    <h1>{{ room.name }}</h1>
-    <p>{{ room.description }}</p>
-    <p>Host: {{ room.host }}</p>
-    <p>Room type: {{ room.room_type }}</p>
-    <h4>Amenity:</h4>
-    <ul>
-        {% for amenity in room.amenity.all %}
-            <li>{{ amenity.name }}</li>
-        {% empty %}
-            <li>-</li>
-        {% endfor %}
-    </ul>
-
-    <h4>Facility:</h4>
-    <ul>
-        {% for facility in room.facility.all %}
-            <li>{{ facility.name }}</li>
-        {% empty %}
-            <li>-</li>
-        {% endfor %}
-    </ul>
-
-    <h4>House_rules:</h4>
-    <ul>
-        {% for house_rules in room.house_rules.all %}
-            <li>{{ house_rules.name }}</li>
-        {% empty %}
-            <li>-</li>
-        {% endfor %}
-    </ul>
-
-
+{% block content %}
+    <h2>Страница в разработке!  {{room.name}}</h2>
 {% endblock %}
