@@ -1,18 +1,17 @@
-from django.core.management import BaseCommand
-
+from django.core.management.base import BaseCommand
 from rooms.models import Facility
 
 
 class Command(BaseCommand):
-    help = 'This command create facilities'
 
+    help = "Команда создает список помещений/объектов для комнат"
+
+    """ 
     def add_arguments(self, parser):
         parser.add_argument(
-            '--number',
-            help=(
-                'This command create facilities'
-            ),
+            "--times", help="How many times do you want me to tell you that I love you?"
         )
+    """
 
     def handle(self, *args, **options):
         facilities = [
@@ -23,6 +22,6 @@ class Command(BaseCommand):
             "Parking",
             "Gym",
         ]
-        for facility in facilities:
-            Facility.objects.create(name=facility)
-        self.stdout.write(self.style.SUCCESS(f"{len(facilities)} facilities created!"))
+        for f in facilities:
+            Facility.objects.create(name=f)
+        self.stdout.write(self.style.SUCCESS(f"{len(facilities)} успешно создано!"))

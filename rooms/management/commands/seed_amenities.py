@@ -1,18 +1,13 @@
-from django.core.management import BaseCommand
-
+from django.core.management.base import BaseCommand
 from rooms.models import Amenity
 
 
 class Command(BaseCommand):
-    help = 'This command create amenities'
 
-    def add_arguments(self, parser):
-        parser.add_argument(
-            '--number',
-            help=(
-                'This command create amenities'
-            ),
-        )
+    help = "Команда создает список удобств для комнат"
+
+    # def add_arguments(self, parser):
+    #     parser.add_argument("--number", help="How many users do you want to create")
 
     def handle(self, *args, **options):
         amenities = [
@@ -59,6 +54,6 @@ class Command(BaseCommand):
             "Towels",
             "TV",
         ]
-        for amenity in amenities:
-            Amenity.objects.create(name=amenity)
-        self.stdout.write(self.style.SUCCESS("Amenities created!"))
+        for a in amenities:
+            Amenity.objects.create(name=a)
+        self.stdout.write(self.style.SUCCESS("Удобства созданы!"))

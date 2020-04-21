@@ -1,30 +1,43 @@
 from django.db import models
-
-# Create your models here.
-from core.models import TimeStampedModel
+from core import models as core_models
 
 
-class Conversation(TimeStampedModel):
-    """ How this is fucking aggy :(( """
-    participants = models.ManyToManyField("users.User", blank=True)
+class Conversation(core_models.TimeStampedModel):
+
+    """ Conversation Model Definition """
+
+    participants = models.ManyToManyField(
+        "users.User", related_name="converstation", blank=True
+    )
 
     def __str__(self):
-        usersnames = []
+        usernames = []
         for user in self.participants.all():
-            usersnames.append(user.username)
-        return str(','.join(usersnames))
+            usernames.append(user.username)
+        return ", ".join(usernames)
 
     def count_messages(self):
-
         return self.messages.count()
 
-    count_messages.short_description = "Количество участников"
+    count_messages.short_description = "Number of Messages"
+
+    def count_participants(self):
+        return self.participants.count()
+
+    count_participants.short_description = "Number of Participants"
 
 
-class Message(TimeStampedModel):
+class Message(core_models.TimeStampedModel):
+
+    """ Message Model Definition """
+
     message = models.TextField()
-    user = models.ForeignKey("users.User", related_name="messages", on_delete=models.CASCADE)
-    conversation = models.ForeignKey("Conversation", related_name="messages", on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        "users.User", related_name="messages", on_delete=models.CASCADE
+    )
+    conversation = models.ForeignKey(
+        "Conversation", related_name="messages", on_delete=models.CASCADE
+    )
 
     def __str__(self):
-        return f"{self.user} says {self.message}"
+        return f"{self.user} says: {self.message}"

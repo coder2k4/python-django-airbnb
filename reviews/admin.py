@@ -1,10 +1,10 @@
 from django.contrib import admin
-
-# Register your models here.
-from reviews.models import Review
+from . import models
 
 
-@admin.register(Review)
+@admin.register(models.Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'rating_average')
-    pass
+
+    """ Review Admin Definition """
+
+    list_display = ("__str__", "rating_average")

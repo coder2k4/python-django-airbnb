@@ -1,11 +1,14 @@
 from django.contrib import admin
-
-# Register your models here.
-from lists.models import List
+from . import models
 
 
-@admin.register(List)
+@admin.register(models.List)
 class ListAdmin(admin.ModelAdmin):
-    list_display = ('name', 'user', 'count_rooms',)
-    search_fields = ('name',)
-    filter_horizontal = ('rooms',)
+
+    """ List Admin Definition """
+
+    list_display = ("name", "user", "count_rooms")
+
+    search_fields = ("name",)
+
+    filter_horizontal = ("rooms",)

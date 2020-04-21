@@ -1,34 +1,45 @@
 from django.contrib import admin
-
-# Register your models here.
 from django.contrib.auth.admin import UserAdmin
+from . import models
 
-from users.models import User
 
+@admin.register(models.User)
+class CustomUserAdmin(UserAdmin):
 
-class AuthorAdmin(UserAdmin):
-    """ Custom user admin """
+    """ Custom User Admin """
+
     fieldsets = UserAdmin.fieldsets + (
-        ("Custom Profile", {
-            "fields": ("avatar",
-                       "gender",
-                       "bio",
-                       "birthday",
-                       "language",
-                       "currency",
-                       "superhost",
-                       )
-        }),
+        (
+            "Custom Profile",
+            {
+                "fields": (
+                    "avatar",
+                    "gender",
+                    "bio",
+                    "birthdate",
+                    "language",
+                    "currency",
+                    "superhost",
+                    "login_method",
+                )
+            },
+        ),
     )
 
-    list_display = UserAdmin.list_display + (
-        'gender',
-        'language',
-        'currency',
-        'superhost',
-        'email_confirmed',
-        'email_secret')
-    list_filter = UserAdmin.list_filter + ('gender', 'superhost', 'language')
+    list_filter = UserAdmin.list_filter + ("superhost",)
 
-
-admin.site.register(User, AuthorAdmin)
+    list_display = (
+        "username",
+        "first_name",
+        "last_name",
+        "email",
+        "is_active",
+        "language",
+        "currency",
+        "superhost",
+        "is_staff",
+        "is_superuser",
+        "email_verified",
+        "email_secret",
+        "login_method",
+    )
